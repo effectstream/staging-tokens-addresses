@@ -25,8 +25,6 @@ This file records the existing reference deployments from the pinned repository 
 
 Source links: [deployment manifest](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/71c5b0b5fc0503187df5fb7bb67687b3a5c55ef6/deployments/stagenet-deployment.json), [reference set](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/71c5b0b5fc0503187df5fb7bb67687b3a5c55ef6/deployments/reference-set.json), [recorded token fixture](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/71c5b0b5fc0503187df5fb7bb67687b3a5c55ef6/fixtures/stagenet/expected-tokens.json), [metadata standard](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/71c5b0b5fc0503187df5fb7bb67687b3a5c55ef6/TOKEN-METADATA.md), [toolchain and deployment instructions](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/71c5b0b5fc0503187df5fb7bb67687b3a5c55ef6/README.md), [UmbraDB token indexer PR #19](https://github.com/acedward/UmbraDB/pull/19).
 
-The [Compact/MinoCrab K-size comparison](token-metadata-k-sizes.md) measures equivalent metadata routines. It is an off-chain compiler experiment and does not replace these deployed artifacts, verifiers, addresses, or transaction facts.
-
 ## Contract address directory
 
 11 contract addresses correspond to 16 token records: DAUR contributes two kinds and CNST contributes five pieces. Names below are reference labels; published values and exceptions are documented later.

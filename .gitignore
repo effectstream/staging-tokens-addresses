@@ -1,0 +1,7 @@
+/.work/
+/benchmark/target/
+/benchmark/.cargo-cache/
+/benchmark/generated/
+*.bzkir
+*.prover
+*.verifier

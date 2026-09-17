@@ -3,6 +3,8 @@
 //! Original Compact source: acedward/mip-erc7496-midnight-contracts at
 //! 71c5b0b5fc0503187df5fb7bb67687b3a5c55ef6. MinoCrab is pinned in Cargo.toml.
 
+pub mod shapes;
+
 use minocrab::v3::{Circuit3, Compiled3, FieldT, Wire3};
 use minocrab::{Private, Public};
 use minocrab_ledger::{emit, emit_event, ImpactElem, LedgerValue};

@@ -1,6 +1,11 @@
-# Reproducing the token-metadata K-size comparison
+# Reproducing the token-metadata benchmarks
 
-This focused crate ports only `MetadataProbe.publishRaw`, `publishStandard`, `publishFixture`, `calls`, and generated `SSTAR.publishMetadata`. The original Compact files at revision `71c5b0b5fc0503187df5fb7bb67687b3a5c55ef6` are copied under `compact-src/`; MinoCrab and every Rust dependency are pinned by `Cargo.toml` and `Cargo.lock`.
+This focused crate contains two suites:
+
+- the exact ports of `MetadataProbe.publishRaw`, `publishStandard`, `publishFixture`, `calls`, and generated `SSTAR.publishMetadata` used by the original K-size comparison;
+- five user-requested typed-format shapes: `literal3`, `ledger3`, `runtime1`, `runtime2`, and `runtime3`.
+
+The original Compact files at revision `71c5b0b5fc0503187df5fb7bb67687b3a5c55ef6` are copied under `compact-src/`. `compact-src/shapes/MetadataShapes.compact` is a clearly isolated comparable fixture for the benchmark-local typed format. MinoCrab and every Rust dependency are pinned by `Cargo.toml` and `Cargo.lock`.
 
 Run the complete Docker workflow from the repository root:
 
@@ -16,8 +21,11 @@ For a focused rerun after dependencies are cached, the relevant commands inside 
 
 ```bash
 cargo test --locked --offline --test equivalence
+cargo test --locked --offline --test shapes_equivalence
 cargo run --locked --offline --bin emit_zkir -- generated/minocrab-v3
 cargo run --locked --offline --bin model_cost
 ```
 
-`COMPACT_V3_DIR` must point to the fresh Compact-v3 output when running the equivalence target directly. Generated artifacts, build targets, Cargo caches, BZKIR, and keys are ignored. See the [comparison report](../token-metadata-k-sizes.md) and [machine-readable measurements](results/measurements.json).
+`COMPACT_V3_DIR` must point to the fresh Compact-v3 output when running either equivalence target directly. The script compiles all Compact fixtures without proof or verifier keys. Generated artifacts, build targets, Cargo caches, BZKIR, keys, and its generated Dockerfile are ignored.
+
+See the [original K-size comparison](../token-metadata-k-sizes.md), [metadata-shape report](../token-metadata-shapes.md), [historical measurements](results/measurements.json), and [typed-shape measurements](results/metadata-shapes.json).

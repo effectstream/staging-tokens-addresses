@@ -93,11 +93,24 @@ compile_compact() {
 compile_compact v2
 compile_compact v3
 
+# The user-requested typed format exists only as a v3 benchmark fixture.
+docker run --rm --network none --cpus 2 --memory 8g --memory-swap 8g \
+  -v "$BENCH_DIR/compact-src:/src:ro" -v "$WORK_DIR/compact:/out" -w /src \
+  "$COMPACT_IMAGE" /opt/compactc/compactc --skip-zk --feature-zkir-v3 \
+  --sourceRoot ../../../ /src/shapes/MetadataShapes.compact \
+  /out/v3/MetadataShapes
+
 docker run --rm --cpus 2 --memory 10g --memory-swap 10g \
   -e CARGO_HOME=/cargo-home -e CARGO_TARGET_DIR=/target -e COMPACT_V3_DIR=/compact-v3 \
   -v "$BENCH_DIR:/work" -v "$WORK_DIR/compact/v3:/compact-v3:ro" \
   -v "$CARGO_VOLUME:/cargo-home" -v "$TARGET_VOLUME:/target" -w /work \
   "$RUST_IMAGE" cargo test --locked --test equivalence
+
+docker run --rm --cpus 2 --memory 10g --memory-swap 10g \
+  -e CARGO_HOME=/cargo-home -e CARGO_TARGET_DIR=/target -e COMPACT_V3_DIR=/compact-v3 \
+  -v "$BENCH_DIR:/work" -v "$WORK_DIR/compact/v3:/compact-v3:ro" \
+  -v "$CARGO_VOLUME:/cargo-home" -v "$TARGET_VOLUME:/target" -w /work \
+  "$RUST_IMAGE" cargo test --locked --test shapes_equivalence
 
 docker run --rm --network none --cpus 2 --memory 10g --memory-swap 10g \
   -e CARGO_HOME=/cargo-home -e CARGO_TARGET_DIR=/target \
@@ -122,6 +135,9 @@ done
 measure zkir "$WORK_DIR/compact/v2/SSTAR/zkir" publishMetadata
 measure zkir-v3 "$WORK_DIR/compact/v3/SSTAR/zkir" publishMetadata
 measure zkir-v3 "$WORK_DIR/minocrab-v3" SSTAR-publishMetadata
+for circuit in literal3 ledger3 runtime1 runtime2 runtime3; do
+  measure zkir-v3 "$WORK_DIR/minocrab-v3" "$circuit"
+done
 
 docker run --rm --network none --cpus 2 --memory 10g --memory-swap 10g \
   -e CARGO_HOME=/cargo-home -e CARGO_TARGET_DIR=/target \

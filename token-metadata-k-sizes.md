@@ -2,6 +2,8 @@
 
 This is a measured comparison of five equivalent token-metadata circuits. It targets the byte-heavy paths in `MetadataProbe` and uses generated `SSTAR.publishMetadata` as the deployed fixed-literal control. It does not replace any Stagenet artifact, address, verifier, or transaction recorded in the [deployment record](stagenet-token-metadata-deployments.md).
 
+The follow-up [metadata-shape measurements](token-metadata-shapes.md) cover a user-requested typed format, a ledger-backed publisher, and independent one/two/three-event runtime scaling.
+
 ## Results
 
 Compact-v3 and MinoCrab-v3 were measured with the same Compact 0.34.0 bundled `/opt/compactc/zkir-v3 mock-compile` oracle. Compact-v2 is the historical source baseline and was measured separately with that image's bundled v2 oracle.

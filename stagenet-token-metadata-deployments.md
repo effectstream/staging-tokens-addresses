@@ -1,8 +1,18 @@
 # Token Metadata OnChain — Stagenet deployment record
 
-Last updated: 2026-09-17T20:26:14Z
+Last updated: 2026-09-18T00:50:20Z
 
-This file records the existing reference deployments from the pinned repository manifest. No new deployment transactions were submitted while preparing this record. All 11 deployment addresses, transaction hashes, block heights, and successful transaction results were independently checked against the public Stagenet indexer.
+This file records the reference deployments of the on-chain token-metadata standard on Midnight Stagenet, redeployed on 2026-09-18 under the layout of **MIP PR #315** (`mip-xxxx:token-metadata[v1]`). All 11 deployment addresses, transaction hashes, block heights and transaction results were checked against the public Stagenet indexer while this record was written (11/11 `ContractDeploy`, `SUCCESS`). The previous set, which used the earlier repository-local layout, is kept in [Superseded deployments](#superseded-deployments-pre-mip-layout-source-71c5b0b) and a consumer of the standard **ignores** it.
+
+## Standard
+
+These contracts implement [MIP PR #315](https://github.com/midnightntwrk/midnight-improvement-proposals/pull/315), file [`mips/mip-xxxx-on-chain-token-metadata.md`](https://github.com/midnightntwrk/midnight-improvement-proposals/blob/mip-on-chain-token-metadata/mips/mip-xxxx-on-chain-token-metadata.md). The MIP is transport-only: metadata travels as `Misc` contract events whose 32-byte name is `pad(32, "mip-xxxx:token-metadata[v1]")` —
+
+    6d69702d787878783a746f6b656e2d6d657461646174615b76315d0000000000
+
+— and whose payload is exactly 256 bytes laid out as `domainSep` at offset 0 (32 bytes), `kind` at 32 (1 byte), `key` at 33 (32 bytes), **`val-type` at 65 (1 byte)**, `val-len` at 66 (1 byte) and `value` at 67 (189 bytes). A `Misc` event under any other name is ignored, not rejected. The token identity is the triple `(contractAddress, domainSep, kind)` with the **full** kind byte, so one contract and one domain separator can hold up to four distinct token records; `privacy` and `storage` derive from that byte, and only the native kinds 0 and 1 have a colour.
+
+**The `xxxx` in the event name is a placeholder.** The MIP is a draft and has not been assigned its number yet. When it is, the event name string changes, and because the name is a literal inside the compiled circuits, **these contracts must be redeployed and the addresses in this file replaced**. The addresses below are therefore valid for the draft layout only.
 
 ## Network and source
 
@@ -15,19 +25,305 @@ This file records the existing reference deployments from the pinned repository 
 | Indexer HTTP | [Stagenet GraphQL API](https://indexer.stagenet.shielded.tools/api/v4/graphql) |
 | Indexer WebSocket | `wss://indexer.stagenet.shielded.tools/api/v4/graphql/ws` |
 | Faucet | [Stagenet faucet API](https://faucet.stagenet.shielded.tools/api/drips) |
-| Pinned source revision | `71c5b0b5fc0503187df5fb7bb67687b3a5c55ef6` |
+| Standard | MIP PR #315 `mip-xxxx:token-metadata[v1]` (draft; the number is a placeholder) |
+| Pinned source revision | `17216362077b3c48da05f06d3a7b0be1b248e1ff` |
 | Compiler / runtime | Compact 0.34.0 / compact-runtime 0.19.0 |
 | Ledger dependency | `@midnightntwrk/ledger-v9@1.0.0-rc.3` |
-| Recorded deployment date | 2026-09-17 UTC |
-| Deployment verification | 11/11 `ContractDeploy`, transaction result `SUCCESS`; checked 2026-09-17T20:26:14Z |
-| Token fixture recorded at | 2026-09-17T06:20:14.133Z |
-| Deployment manifest SHA-256 | `dad2f75a9839df4bf98b051bf4589ef330c0741b85252423828c4859c1f16503` |
+| Recorded deployment date | 2026-09-18 UTC |
+| Deployment verification | 11/11 `ContractDeploy`, transaction result `SUCCESS`; checked 2026-09-18T00:50:20Z |
+| Token fixture recorded at | 2026-09-18T00:45:29.268Z |
+| Deployment manifest SHA-256 | `1b611c71895a7c7c858b87f8a1df5d265a3ca52066cd4976fce5c5adcb802bc5` |
 
-Source links: [deployment manifest](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/71c5b0b5fc0503187df5fb7bb67687b3a5c55ef6/deployments/stagenet-deployment.json), [reference set](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/71c5b0b5fc0503187df5fb7bb67687b3a5c55ef6/deployments/reference-set.json), [recorded token fixture](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/71c5b0b5fc0503187df5fb7bb67687b3a5c55ef6/fixtures/stagenet/expected-tokens.json), [metadata standard](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/71c5b0b5fc0503187df5fb7bb67687b3a5c55ef6/TOKEN-METADATA.md), [toolchain and deployment instructions](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/71c5b0b5fc0503187df5fb7bb67687b3a5c55ef6/README.md), [UmbraDB token indexer PR #19](https://github.com/acedward/UmbraDB/pull/19).
+Source links: [deployment manifest](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/17216362077b3c48da05f06d3a7b0be1b248e1ff/deployments/stagenet-deployment.json), [reference set](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/17216362077b3c48da05f06d3a7b0be1b248e1ff/deployments/reference-set.json), [recorded token fixture](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/17216362077b3c48da05f06d3a7b0be1b248e1ff/fixtures/stagenet/expected-tokens.json), [implementation notes](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/17216362077b3c48da05f06d3a7b0be1b248e1ff/TOKEN-METADATA.md), [toolchain and deployment instructions](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/17216362077b3c48da05f06d3a7b0be1b248e1ff/README.md), [contracts PR #2](https://github.com/acedward/mip-erc7496-midnight-contracts/pull/2), [UmbraDB token indexer PR #19](https://github.com/acedward/UmbraDB/pull/19).
 
 ## Contract address directory
 
-11 contract addresses correspond to 16 token records: DAUR contributes two kinds and CNST contributes five pieces. Names below are reference labels; published values and exceptions are documented later.
+11 contract addresses carry 17 token records over 17 identities `(contractAddress, domainSep, kind)` and 15 `(contractAddress, domainSep)` pairs: DAUR contributes two kinds under one domain separator, CNST contributes five pieces, and LLIAR contributes two kinds — one observed, one declared. Names below are reference labels; published values and exceptions are documented later.
+
+| ID | Reference name | Contract address (hex) | Deployment block |
+|---|---|---|---|
+| LSUN | Ledger Sun | `152827bc1d9ea7ecec0d13879e87a21ecf8f283804dfef16c9b805612acfea90` | 508432 |
+| LMOON | Ledger Moon | `fef951c605d33514bd9c54b56772e23e9abaad07982457fd918dc68984cc433a` | 508451 |
+| SSTAR | Shielded Star | `171ac372bb73fb9fee495cf578fe8e99ddc622f2ee18fd327e1a90d01cb3cc95` | 508464 |
+| SNEB | Shielded Nebula | `19036e0277d378ff8356b32e74bbd6aa03d4531bc9094031e785fb48c151b538` | 508474 |
+| SGHOST | Shielded Ghost | `165e623bc4e5e0fc99607011fcb8cbe436e001071f52130435b2ae11bbfdcf34` | 508489 |
+| UCOM | Unshielded Comet | `de76f303d319aa7427cfac5eb671c1d693259e9ba59086c251c495708fc88acb` | 508496 |
+| UMET | Unshielded Meteor | `e17be6733ec82a884927041bdcf2e954265a0cd07864df8922064bc218e8198a` | 508507 |
+| UPROM | Unshielded Promise | `2af4685bc8328a1a18ae86e428a9ecacc7c2f3bf12c293e18b2fd9cf4092bdf3` | 508524 |
+| DAUR | Dual Aurora | `3ad541b2dbbaeb69b2381bec19b0d9211925726f8784b8bff1b87b92d6a09256` | 508530 |
+| CNST | Constellations | `9f0d030eb2716e593a3872d569664d6ff680cdfd81ed40e86d60de39557511d7` | 508547 |
+| LLIAR | Ledger Liar | `af0330b143e2ea01071a1435495f8be82cd689e8c5af8a05c5dd0df652f20a95` | 508592 |
+
+## Recorded token metadata
+
+Metadata, native mint counts and amounts are the pinned fixture snapshot, not a fresh scan of later activity. The status column is the expected consumer classification from that fixture: MIP section 7.2 defines exactly three — `observed` (minted, nothing said), `declared` (described, never minted) and `described` (both). Amounts are base units; native mint totals are not circulating supply and do not describe ledger-token balances. `Kind` is the MIP identity byte.
+
+| Token record | Published name | Published symbol | Decimals | Kind | Expected status | Native mints | Native amount |
+|---|---|---|---|---|---|---|---|
+| LSUN | Ledger Sun | LSUN | 6 | 2 — unshielded ledger | declared | 0 | 0 |
+| LMOON | Ledger Moon (renamed) | LMOON | 8 | 2 — unshielded ledger | declared | 0 | 0 |
+| SSTAR | Shielded Star | SSTAR | 6 | 1 — shielded native | described | 1 | 5000000 |
+| SNEB | Shielded Nebula | SNEB | 0 | 1 — shielded native | described | 2 | 3 |
+| SGHOST | not published | not published | not published | 1 — shielded native | observed | 1 | 13 |
+| UCOM | Unshielded Comet | UCOM | 6 | 0 — unshielded native | described | 1 | 2500000 |
+| UMET | Unshielded Meteor | UMET | 2 | 0 — unshielded native | described | 3 | 600 |
+| UPROM | Unshielded Promise | UPROM | 6 | 0 — unshielded native | declared | 0 | 0 |
+| DAUR / kind 0 | Dual Aurora | DAUR | 6 | 0 — unshielded native | described | 1 | 2000 |
+| DAUR / kind 1 | Dual Aurora | DAUR | 6 | 1 — shielded native | described | 1 | 1000 |
+| CNST / orion | Constellations · Orion | CNST | 0 | 1 — shielded native | described | 1 | 1 |
+| CNST / lyra | Constellations · Lyra | CNST | 0 | 1 — shielded native | described | 1 | 1 |
+| CNST / cygnus | Constellations · Cygnus | CNST | 0 | 1 — shielded native | described | 1 | 1 |
+| CNST / vega | Constellations · Vega | CNST | 0 | 1 — shielded native | described | 1 | 1 |
+| CNST / altair | Constellations · Altair | CNST | 0 | 1 — shielded native | described | 1 | 1 |
+| LLIAR / kind 0 | not published | not published | not published | 0 — unshielded native | observed | 1 | 7 |
+| LLIAR / kind 2 | Ledger Liar | LLIAR | 6 | 2 — unshielded ledger | declared | 0 | 0 |
+
+## Token domains and native colors
+
+Every domain text below is UTF-8 padded with trailing zero bytes to exactly 32 bytes. A kind-2 or kind-3 record has no colour at all (MIP section 3), so the ledger rows below carry none; LLIAR appears twice because its two kinds are two records, and only its kind-0 row — the one the chain actually minted — has a colour.
+
+| Token record | Domain text | Kind | Native color (hex) |
+|---|---|---|---|
+| LSUN | `umbra:lsun` | 2 | none — not a native kind |
+| LMOON | `umbra:lmoon` | 2 | none — not a native kind |
+| SSTAR | `umbra:sstar` | 1 | `3248c456d02ce8a8c2b42541488add504152f745e168d139934c637339c55553` |
+| SNEB | `umbra:sneb` | 1 | `e51a1df69e7bdac483b1ef3a418ab993145e075c946aa90b57a5200328a60e01` |
+| SGHOST | `umbra:sghost` | 1 | `1be172b1e46d0ceacc3200aded4f681eafabe42611ee2b962200802573675bb3` |
+| UCOM | `umbra:ucom` | 0 | `10dbdaf2b0b0aee765b3a83517f63a0371088565aa1d4cf89ccdc1c70b298269` |
+| UMET | `umbra:umet` | 0 | `ab2fed68e75cd202f09dc7dc224fdb9c7a77c078a073596d39f574598f19d6ee` |
+| UPROM | `umbra:uprom` | 0 | `a166e633b53e590c2d8fd9c7d6bcd655867b4c03b3f0cdd53be11adb99d80ac3` |
+| DAUR / kind 0 | `umbra:daur` | 0 | `00b357a6d3d7a08be132a3ff81c48a54c9a566b4e73eedc285a34c6d2c51d325` |
+| DAUR / kind 1 | `umbra:daur` | 1 | `00b357a6d3d7a08be132a3ff81c48a54c9a566b4e73eedc285a34c6d2c51d325` |
+| CNST / orion | `cnst:orion` | 1 | `e53dea555436716ce8a774fcfe0a71a3076725f6723930d82a0134e02730ccdc` |
+| CNST / lyra | `cnst:lyra` | 1 | `ffe655921c01f3a091fc2f935c71e72ac41669609bfd0c97ac9a84b4546097dd` |
+| CNST / cygnus | `cnst:cygnus` | 1 | `d33a7c573e3272dfc2a52620327e682d178fb9df5d391cb9b5da966587ec5934` |
+| CNST / vega | `cnst:vega` | 1 | `6f6d0047200c30d3bf0b6bdd9c6beaf4946255e7eadc1ceb15192f8c6d71a5cf` |
+| CNST / altair | `cnst:altair` | 1 | `43a69ea323b809fa5ece303c1b7d8bb6c9f7835e67ca5b8a205074e2840e1032` |
+| LLIAR / kind 0 | `umbra:lliar` | 0 | `3b420f37be1c6c175a2f3766e74ab4308aba79a33c7037acdc9a1c7118fd4dc1` |
+| LLIAR / kind 2 | `umbra:lliar` | 2 | none — not a native kind |
+
+## Deployment and call details
+
+Deployment block times below come from the live indexer query. The script recorded-at time comes from the pinned manifest and is later than the block timestamp. Post-deployment calls are transcribed from the manifest, where every listed call has status SucceedEntirely; those individual calls were not independently re-queried for this record.
+
+### LSUN — Ledger Sun
+
+- Source: [LSUN.compact](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/17216362077b3c48da05f06d3a7b0be1b248e1ff/contracts/generated/LSUN.compact); reference template: `LedgerToken`.
+- Contract address: `152827bc1d9ea7ecec0d13879e87a21ecf8f283804dfef16c9b805612acfea90`.
+- Deployment transaction hash: `9a131d060981b73d8574bd2307f62d9e9fd90611704b9168aafe2ef1ad7287b6`.
+- Deployment transaction identifier: `001e34832416c9015ea681142603eb2d13f50e17b4d6a1cbe827491f1af53c0944`.
+- Deployment block: **508432**; block hash: `f8b97c27baa12473c0eecdbc7d73f4a02a5c945306e1dcd0b0dfce21ecd05fed`.
+- Block timestamp: **2026-09-18T00:27:00Z**; script recorded at: `2026-09-18T00:27:15.037Z`.
+- Live deployment verification: `ContractDeploy`, `SUCCESS`.
+- Artifact SHA-256 recorded by deployment script: `2ae4c2fe41d44e65472c934a4400d4a7f585b8c17c4499360497c7bd24e04ba5`.
+
+Ledger balances: the reference sequence credits 1,000,000 base units and transfers 250,000. These are contract-state operations, not native mint effects; a kind-2 token has no colour (MIP section 3).
+
+| Step | Circuit | Block | Transaction hash | Recorded at (UTC) |
+|---|---|---|---|---|
+| 0 | `publishMetadata` | 508442 | `fba09720978780bbf8ee675467691dd3286436d675a8ca17a26e8f4a1846079c` | 2026-09-18T00:28:14.756Z |
+| 1 | `ledgerMint` | 508445 | `973ee90713850d35edd53fe794dd5fb1bc42e3f7507e368c9638aa4c626da3b9` | 2026-09-18T00:28:31.850Z |
+| 2 | `transfer` | 508448 | `19d940276b6037515484a523c31130083325c5dbe79027db1a8a9b20ba380232` | 2026-09-18T00:28:50.586Z |
+
+### LMOON — Ledger Moon
+
+- Source: [LMOON.compact](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/17216362077b3c48da05f06d3a7b0be1b248e1ff/contracts/generated/LMOON.compact); reference template: `LedgerToken`.
+- Contract address: `fef951c605d33514bd9c54b56772e23e9abaad07982457fd918dc68984cc433a`.
+- Deployment transaction hash: `b51f62231cb15984bb4f7b727ae931b25ab65f510eb5848c56d338dd408621e8`.
+- Deployment transaction identifier: `00a8e6788d6a6f147ff517d265f02af2d10262fa6719407467109c1e7863d8c550`.
+- Deployment block: **508451**; block hash: `d16c68035b7332ec16097bb750c9852b18f15ae719794442813b9e3b0697e228`.
+- Block timestamp: **2026-09-18T00:28:54Z**; script recorded at: `2026-09-18T00:29:08.467Z`.
+- Live deployment verification: `ContractDeploy`, `SUCCESS`.
+- Artifact SHA-256 recorded by deployment script: `218656a63c52d70458c6aa7a830099ad014a8bc8128588870d9c7e4603a84c06`.
+
+Published initially as Ledger Moon, then changed to Ledger Moon (renamed). The reference sequence credits 5,000,000 base units in contract state. A kind-2 token has no colour.
+
+| Step | Circuit | Block | Transaction hash | Recorded at (UTC) |
+|---|---|---|---|---|
+| 0 | `publishMetadata` | 508454 | `d21119de590a698a01a8185cf70c68a4ef8947f0220e0196d47c94977f51cc57` | 2026-09-18T00:29:26.624Z |
+| 1 | `ledgerMint` | 508457 | `9de39cc155bc8b13596230143db1ce0e8d4fdbaa945838afd47d737752319e57` | 2026-09-18T00:29:43.951Z |
+| 2 | `publishRename` | 508461 | `d2e96632e7d368a3fcd2379fb4978d55a3ea09d491e8828245da5faabddc742d` | 2026-09-18T00:30:07.966Z |
+
+### SSTAR — Shielded Star
+
+- Source: [SSTAR.compact](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/17216362077b3c48da05f06d3a7b0be1b248e1ff/contracts/generated/SSTAR.compact); reference template: `NativeShieldedToken`.
+- Contract address: `171ac372bb73fb9fee495cf578fe8e99ddc622f2ee18fd327e1a90d01cb3cc95`.
+- Deployment transaction hash: `ddd4afb291674087db777871d602475a3e605e1f7819421f39387d2947bb3e4d`.
+- Deployment transaction identifier: `0031ddab3ee80ad2b2a3a58cea6b30fec7081e509a775302e7e4339a0577cd3dec`.
+- Deployment block: **508464**; block hash: `585dca21ed7d2d90d2ab1f0533b813bf00bd53d88a96fec407dfc8b127e127ea`.
+- Block timestamp: **2026-09-18T00:30:12Z**; script recorded at: `2026-09-18T00:30:27.018Z`.
+- Live deployment verification: `ContractDeploy`, `SUCCESS`.
+- Artifact SHA-256 recorded by deployment script: `055a65a7128a6a6a2f04a4c48c05b8b31a4743632668ed9df91e2a87efb87069`.
+
+Publishes name, symbol and decimals, then mints 5,000,000 native shielded base units. `decimals` is carried as `val-type` 2 (a big-endian unsigned integer of one byte), which is what MIP Appendix A requires.
+
+| Step | Circuit | Block | Transaction hash | Recorded at (UTC) |
+|---|---|---|---|---|
+| 0 | `publishMetadata` | 508467 | `4f9c48dd7c9c71d35bb9c55f9d6cc6dfb704267a720d46b66a61954a402ba564` | 2026-09-18T00:30:44.038Z |
+| 1 | `mint` | 508471 | `a25d848fd9d8bf38a9ca782adb40611d4be9158760c8e5b088e01336cccda147` | 2026-09-18T00:31:08.270Z |
+
+### SNEB — Shielded Nebula
+
+- Source: [SNEB.compact](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/17216362077b3c48da05f06d3a7b0be1b248e1ff/contracts/generated/SNEB.compact); reference template: `NativeShieldedToken`.
+- Contract address: `19036e0277d378ff8356b32e74bbd6aa03d4531bc9094031e785fb48c151b538`.
+- Deployment transaction hash: `5a8970eb2b0baf755a14a9b217e5d7019f4c2bd8895adb876c01b1f02670180b`.
+- Deployment transaction identifier: `0097aa6a5b2aec7711cc65e14ca1ac40464eb5278ff91014d983223bb61f9af11a`.
+- Deployment block: **508474**; block hash: `db5a922d26e5565f54a0503fcca32b784d3e5fbda5a3bb2405123f3cee26429f`.
+- Block timestamp: **2026-09-18T00:31:12Z**; script recorded at: `2026-09-18T00:31:27.148Z`.
+- Live deployment verification: `ContractDeploy`, `SUCCESS`.
+- Artifact SHA-256 recorded by deployment script: `7e22ec0cb67f8a77ff357823476773cf0ffe5420d1028fa5245d884e25759bf4`.
+
+Publishes metadata and a multipart JSON document in `metadata/0` through `metadata/5`, each part `val-type` 3, then mints 1 and 2 native shielded units. The split exists because one event carries at most 189 bytes of value.
+
+| Step | Circuit | Block | Transaction hash | Recorded at (UTC) |
+|---|---|---|---|---|
+| 0 | `publishMetadata` | 508478 | `c5605da20d98b27b9393998762dd401aaa916b76829786f9bb31f43412815144` | 2026-09-18T00:31:50.757Z |
+| 1 | `mint` | 508482 | `dfb58222e42486ce648b58af707f8601758392d8f5e767e157b1b4222fc01ade` | 2026-09-18T00:32:14.998Z |
+| 2 | `mint` | 508486 | `6196df7d85f97273b1ce5cf1438765d5a4f6abadb1eeaa39d1d89026c021775c` | 2026-09-18T00:32:39.117Z |
+
+### SGHOST — Shielded Ghost
+
+- Source: [SGHOST.compact](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/17216362077b3c48da05f06d3a7b0be1b248e1ff/contracts/generated/SGHOST.compact); reference template: `NativeShieldedToken`.
+- Contract address: `165e623bc4e5e0fc99607011fcb8cbe436e001071f52130435b2ae11bbfdcf34`.
+- Deployment transaction hash: `f279fb502650ce0a243a7a1721794a8bd23637a71327fb21427eb426dff09fc1`.
+- Deployment transaction identifier: `006e87fcaa876cc627b4e9120190ab77433f8d15d0ba205e0b6dc09c945b0b55c3`.
+- Deployment block: **508489**; block hash: `014ac713bccd992a61d67ead2a4894858e8198750ce1b029a1dee9427360d5fb`.
+- Block timestamp: **2026-09-18T00:32:42Z**; script recorded at: `2026-09-18T00:32:56.502Z`.
+- Live deployment verification: `ContractDeploy`, `SUCCESS`.
+- Artifact SHA-256 recorded by deployment script: `adfe46e83da1d995b955cb1dd16ee6c9130b7f81016eca6469ab48b9a26e7f14`.
+
+Shielded Ghost / SGHOST is a reference label only. No name, symbol or decimals were published, so the row stays `observed`: the chain shows a token that exists and says nothing about itself. The mint creates 13 native shielded base units.
+
+| Step | Circuit | Block | Transaction hash | Recorded at (UTC) |
+|---|---|---|---|---|
+| 0 | `mint` | 508493 | `2e62bdab138c3228ddeddcf37fc47d6f6f9296ff1805eb0be0bfb8523fb50897` | 2026-09-18T00:33:20.372Z |
+
+### UCOM — Unshielded Comet
+
+- Source: [UCOM.compact](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/17216362077b3c48da05f06d3a7b0be1b248e1ff/contracts/generated/UCOM.compact); reference template: `NativeUnshieldedToken`.
+- Contract address: `de76f303d319aa7427cfac5eb671c1d693259e9ba59086c251c495708fc88acb`.
+- Deployment transaction hash: `76405e2e994fd11c0e698f6f4133e65d5be4ba96337991741652bc2b18e7f2ba`.
+- Deployment transaction identifier: `0004b869f51b4ab62ab5086f3f0ae32c3c5a40c682a417eff4469293e2d9ee4d2c`.
+- Deployment block: **508496**; block hash: `b724db5a581f78f574c706b6544824a11732c15fb539d65eb405f7d07d84c92b`.
+- Block timestamp: **2026-09-18T00:33:24Z**; script recorded at: `2026-09-18T00:33:39.354Z`.
+- Live deployment verification: `ContractDeploy`, `SUCCESS`.
+- Artifact SHA-256 recorded by deployment script: `bb3352d88b2c3251fc901eaa1aeb3ccfd0dfc23a716a59d318ea589119141937`.
+
+Publishes metadata, then mints 2,500,000 native unshielded base units.
+
+| Step | Circuit | Block | Transaction hash | Recorded at (UTC) |
+|---|---|---|---|---|
+| 0 | `publishMetadata` | 508500 | `44b534f86a9af1dccc4de2d7f3589c16e91d9450e2f2b671d637b4662d7480c2` | 2026-09-18T00:34:02.879Z |
+| 1 | `mint` | 508504 | `d9776f172ea74c059f83b04999ef9ed941c0b815d72c418bddbfcad168d83f07` | 2026-09-18T00:34:25.618Z |
+
+### UMET — Unshielded Meteor
+
+- Source: [UMET.compact](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/17216362077b3c48da05f06d3a7b0be1b248e1ff/contracts/generated/UMET.compact); reference template: `NativeUnshieldedToken`.
+- Contract address: `e17be6733ec82a884927041bdcf2e954265a0cd07864df8922064bc218e8198a`.
+- Deployment transaction hash: `88fcfd807e6a7e9a26ecb456fa256b1be72fbfc49b6233cbe35f6c944be0ee19`.
+- Deployment transaction identifier: `008f97e75ff9305159ea837c4c3b86b505003c527ea45ff68b443bd6c63251e105`.
+- Deployment block: **508507**; block hash: `e836dc13557c5b8e8e0a77b0fd2594ce7d38965154f6a5837530be17642f32e1`.
+- Block timestamp: **2026-09-18T00:34:30Z**; script recorded at: `2026-09-18T00:34:44.544Z`.
+- Live deployment verification: `ContractDeploy`, `SUCCESS`.
+- Artifact SHA-256 recorded by deployment script: `0c1ddee94faa3b6ac14f90aa215702c9d405e276e28579dc708dc2105f8dbfe1`.
+
+Mints 100, 200 and 300 native unshielded base units before publishing metadata; exercises the observed-to-described transition.
+
+| Step | Circuit | Block | Transaction hash | Recorded at (UTC) |
+|---|---|---|---|---|
+| 0 | `mint` | 508511 | `ce3f21f21cf4ea0bee8ea4105ea50cc624db44ec8c4a60de60030779042119da` | 2026-09-18T00:35:08.270Z |
+| 1 | `mint` | 508514 | `88f37a81eedba36b3477008492af9a60a28a37699685fc7d19e9d1598bada3fe` | 2026-09-18T00:35:25.622Z |
+| 2 | `mint` | 508518 | `088037cb9ce3e17ff2399f3d0847e47d06648b996d3ac250b550a8cd6ceda4d5` | 2026-09-18T00:35:49.627Z |
+| 3 | `publishMetadata` | 508521 | `f1243033cf60fce52465d479f032b6fdf74b4b1857c18c9b5d38ec77d4244b51` | 2026-09-18T00:36:08.387Z |
+
+### UPROM — Unshielded Promise
+
+- Source: [UPROM.compact](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/17216362077b3c48da05f06d3a7b0be1b248e1ff/contracts/generated/UPROM.compact); reference template: `NativeUnshieldedToken`.
+- Contract address: `2af4685bc8328a1a18ae86e428a9ecacc7c2f3bf12c293e18b2fd9cf4092bdf3`.
+- Deployment transaction hash: `e4a9bd3eed9fb034bc1cab9bfc1d08a6a90ac32e1f4b8d27bc51afbb2d18dc48`.
+- Deployment transaction identifier: `0066aa1080cad1604991eb8577451b1fcef6a5c1f65f6d6d9987ea404d1b667a92`.
+- Deployment block: **508524**; block hash: `c936ec2147a5d4823a1344e0b6e67fd5f259aefc8f9335e4ec1e72025a2b3e94`.
+- Block timestamp: **2026-09-18T00:36:12Z**; script recorded at: `2026-09-18T00:36:25.974Z`.
+- Live deployment verification: `ContractDeploy`, `SUCCESS`.
+- Artifact SHA-256 recorded by deployment script: `d52e20d3784d069f9b2c59d9047effaaa07313300a80b4b2bc57af60479bddab`.
+
+Publishes metadata without minting: `declared`, with a derivable colour and no mint effect behind it.
+
+| Step | Circuit | Block | Transaction hash | Recorded at (UTC) |
+|---|---|---|---|---|
+| 0 | `publishMetadata` | 508527 | `0cf6cdf80fb2534a59e29aac9bf5307726574d194b8ea417c26c9398dd284bb8` | 2026-09-18T00:36:44.414Z |
+
+### DAUR — Dual Aurora
+
+- Source: [DAUR.compact](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/17216362077b3c48da05f06d3a7b0be1b248e1ff/contracts/generated/DAUR.compact); reference template: `NativeDualToken`.
+- Contract address: `3ad541b2dbbaeb69b2381bec19b0d9211925726f8784b8bff1b87b92d6a09256`.
+- Deployment transaction hash: `31d308627efd2dffe6c369b0205e160a6d0c02075de2836b420ae5632b86beca`.
+- Deployment transaction identifier: `0042eefc5423d50bd79669102227fcfb586495f0e60200a8d76947dca7d91250c8`.
+- Deployment block: **508530**; block hash: `e1f3528fa9cc1b66df1255dd659ecf7e15e9d7d4a591c03958131793a06bd522`.
+- Block timestamp: **2026-09-18T00:36:48Z**; script recorded at: `2026-09-18T00:37:02.210Z`.
+- Live deployment verification: `ContractDeploy`, `SUCCESS`.
+- Artifact SHA-256 recorded by deployment script: `eab07f637c50155e363b650542d1700458d912c0cd7ffc7803fda633913db0c6`.
+
+One contract and one domain separator produce two token records, kind 0 and kind 1. Both share the same 32-byte colour; the reference mints 1,000 shielded and 2,000 unshielded base units. Under MIP section 4 these are two identities, not one row with two storages.
+
+| Step | Circuit | Block | Transaction hash | Recorded at (UTC) |
+|---|---|---|---|---|
+| 0 | `publishUnshielded` | 508533 | `a78694fe4a01b8ff207f5c0b937b75b56175825c17b1b54a6e0959d21096cbbc` | 2026-09-18T00:37:20.431Z |
+| 1 | `publishShielded` | 508536 | `07b668ee87dc7f4f85fec2ea3c8c2370fe36ae8a1206a78a64f4807f6ffb4b90` | 2026-09-18T00:37:37.768Z |
+| 2 | `mintShielded` | 508540 | `905cce98a63a69d167cbd1e623cc86f9d788f3ef204e6098f34cfcdd55d32428` | 2026-09-18T00:38:01.986Z |
+| 3 | `mintUnshielded` | 508544 | `bcc9c1226b0217cf1a4caa1b8acee9dbc6b3fc45f03189e289ff837236c64d85` | 2026-09-18T00:38:25.759Z |
+
+### CNST — Constellations
+
+- Source: [CNST.compact](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/17216362077b3c48da05f06d3a7b0be1b248e1ff/contracts/generated/CNST.compact); reference template: `ShieldedCollection`.
+- Contract address: `9f0d030eb2716e593a3872d569664d6ff680cdfd81ed40e86d60de39557511d7`.
+- Deployment transaction hash: `49dfe957eaf737dcbadb3345e052a54ff0311b296c1b160eec2d52d595c8866c`.
+- Deployment transaction identifier: `0041f402b5a08c0e4ee9dbf024249939e1817801c90388d122df673069dc3f91e1`.
+- Deployment block: **508547**; block hash: `93d86d4c38729944d48efddf384dc5204c2df66074b74622d37732d530891577`.
+- Block timestamp: **2026-09-18T00:38:30Z**; script recorded at: `2026-09-18T00:38:45.085Z`.
+- Live deployment verification: `ContractDeploy`, `SUCCESS`.
+- Artifact SHA-256 recorded by deployment script: `22f1428951ea960a1025e9bc8e6cab1ca93e2e458875c6f32a12f582d9b4b0ec`.
+
+One contract holds five shielded pieces: Orion, Lyra, Cygnus, Vega and Altair. Each has its own domain separator and colour. Orion magnitude updates are 0.18 → 0.42 → 1.25, carried as `val-type` 1 text (MIP Appendix A has no fractional integer type). Recorded `tokenUri` values are `val-type` 4 and point at `http://localhost:10020/constellations/{piece}`; these are local demonstration resolver URLs, not a public hosted metadata service.
+
+| Step | Circuit | Block | Transaction hash | Recorded at (UTC) |
+|---|---|---|---|---|
+| 0 | `mintPiece` | 508551 | `6b460586b758a441d706cca8fcc390937929c1ddf785bd42db007d21190095d0` | 2026-09-18T00:39:08.792Z |
+| 1 | `publishOrion` | 508554 | `3ad443ffb246854763f4e215b1a4bcf40c95601590dfcdae86d58a79290dad7e` | 2026-09-18T00:39:25.856Z |
+| 2 | `updateOrion1` | 508557 | `e9f679d8c741602e24a773db9b61f0f7f2078c6e4f3e9cb1c6c2f87cb40af8cb` | 2026-09-18T00:39:44.574Z |
+| 3 | `updateOrion2` | 508560 | `b482d285b284ed9c8f555a7e36d3d8155568692be9c7c7508c4aea00d5091f40` | 2026-09-18T00:40:01.931Z |
+| 4 | `mintPiece` | 508564 | `8eec45631ee6812f1486fa47b4c8b9511958a02740f1401fa1156149383c6012` | 2026-09-18T00:40:26.145Z |
+| 5 | `publishLyra` | 508567 | `d1f43fb4e30137671300c52502171684d44ee0e3cab309d546002fd13bdb9d82` | 2026-09-18T00:40:44.612Z |
+| 6 | `mintPiece` | 508571 | `cf9008d7fea43041be2837e14daf74c648477234d2b69535204ba078d4a2c42f` | 2026-09-18T00:41:08.833Z |
+| 7 | `publishCygnus` | 508575 | `6542360a07686bf8fddb6cb8554ee8e481d5624b0a9284f1495c4516ae67344c` | 2026-09-18T00:41:32.670Z |
+| 8 | `mintPiece` | 508579 | `c0febe7ceaea028a12be555301471e7d17306f683c3aa8fa904896a20bf35803` | 2026-09-18T00:41:56.988Z |
+| 9 | `publishVega` | 508582 | `b9c633bdc5f8c6c6190bad7f22e51336429e3f2ee3ecb26ecd633dfee07a84cf` | 2026-09-18T00:42:14.038Z |
+| 10 | `mintPiece` | 508586 | `26c517051b1ca33c0d807c58eef0de1ffb6a8fc1dbe2fad2c3efa1a12f74d8dd` | 2026-09-18T00:42:38.306Z |
+| 11 | `publishAltair` | 508589 | `cb92579d7fe432f6ce1965f20e64bc7260cabafd6c0944f649012212253c1b81` | 2026-09-18T00:42:56.762Z |
+
+### LLIAR — Ledger Liar
+
+- Source: [LLIAR.compact](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/17216362077b3c48da05f06d3a7b0be1b248e1ff/contracts/generated/LLIAR.compact); reference template: `NativeUnshieldedToken`.
+- Contract address: `af0330b143e2ea01071a1435495f8be82cd689e8c5af8a05c5dd0df652f20a95`.
+- Deployment transaction hash: `ea3acc74df49db1c1e99f872e9a4b041bb8413b6a49aa1aa0386069fda09a143`.
+- Deployment transaction identifier: `00506a914ce46af617cecf7ff5a14f9bec7746d623c909493c5745ff53dc54599b`.
+- Deployment block: **508592**; block hash: `6699865c2adf79357362eb4f29d2452a14babd0aedce333ed0a6ad306bb13bf2`.
+- Block timestamp: **2026-09-18T00:43:00Z**; script recorded at: `2026-09-18T00:43:14.462Z`.
+- Live deployment verification: `ContractDeploy`, `SUCCESS`.
+- Artifact SHA-256 recorded by deployment script: `79f9e8eb2e21b11b475aad7ab7587b996cc091041a48d8dc39f0489d243ba8bb`.
+
+The reference contradiction fixture, and the row that shows what MIP section 4 changed. Its metadata declares kind **2** (unshielded ledger) while the contract mints **7** native unshielded base units, which is kind **0**. Because the identity is `(contractAddress, domainSep, kind)` with the full kind byte, this is not a conflict inside one row: it is **two rows** — an `observed` kind-0 row carrying the mint and the colour and no name, and a `declared` kind-2 row carrying the name and no mint and no colour. Neither can hide or relabel the other (MIP sections 6.3 and 7.2), and there is no `inconsistent` state anywhere.
+
+| Step | Circuit | Block | Transaction hash | Recorded at (UTC) |
+|---|---|---|---|---|
+| 0 | `publishMetadata` | 508595 | `87145bb180fba12fd471d4e1fb3fde77b3b2278bd0920d53e74c4def709e79c9` | 2026-09-18T00:43:33.127Z |
+| 1 | `mint` | 508599 | `7938eeebab0367aeeebe437a2cf22ea0673492222e1487e30daca74d070881ae` | 2026-09-18T00:43:56.821Z |
+
+## Superseded deployments (pre-MIP layout, source `71c5b0b`)
+
+The set below was deployed on 2026-09-17 under the earlier repository-local layout: event name `TokenMetadata`, no `val-type` byte, a 190-byte value, and a token table keyed on bit 0 of the kind byte (which is why its record carried a sixteenth row and an `inconsistent` status that the MIP does not define). **A MIP consumer ignores every event these contracts emitted** (MIP section 1). They are still deployed and still queryable; nothing was revoked or destroyed. They are kept here so that anyone holding the old addresses can see what became of them.
+
+Pinned source revision: `71c5b0b5fc0503187df5fb7bb67687b3a5c55ef6`. Deployment manifest SHA-256: `dad2f75a9839df4bf98b051bf4589ef330c0741b85252423828c4859c1f16503`. Recorded 2026-09-17; 11 contracts, 16 token records.
 
 | ID | Reference name | Contract address (hex) | Deployment block |
 |---|---|---|---|
@@ -43,268 +339,7 @@ Source links: [deployment manifest](https://github.com/acedward/mip-erc7496-midn
 | CNST | Constellations | `6cedc46ac5a8cda964c2493a753c2c4942d6e3ed7641bdd0c28e9b672cb1e97c` | 497399 |
 | LLIAR | Ledger Liar | `b006a6647c26829987ec1bd59de1d4107019d7f54c097d3fdc25a4dddcf1231e` | 497538 |
 
-## Recorded token metadata
-
-Metadata, native mint counts, and amounts are the pinned fixture snapshot, not a fresh scan of later activity. The status column is the expected UmbraDB classification from that fixture. Amounts are base units; native mint totals are not circulating supply and do not describe ledger-token balances.
-
-| Token record | Published name | Published symbol | Decimals | Storage / kind | Expected status | Native mints | Native amount |
-|---|---|---|---|---|---|---|---|
-| LSUN | Ledger Sun | LSUN | 6 | ledger / unshielded | declared | 0 | 0 |
-| LMOON | Ledger Moon (renamed) | LMOON | 8 | ledger / unshielded | declared | 0 | 0 |
-| SSTAR | Shielded Star | SSTAR | 6 | native / shielded | described | 1 | 5000000 |
-| SNEB | Shielded Nebula | SNEB | 0 | native / shielded | described | 2 | 3 |
-| SGHOST | not published | not published | not published | native / shielded | observed | 1 | 13 |
-| UCOM | Unshielded Comet | UCOM | 6 | native / unshielded | described | 1 | 2500000 |
-| UMET | Unshielded Meteor | UMET | 2 | native / unshielded | described | 3 | 600 |
-| UPROM | Unshielded Promise | UPROM | 6 | native / unshielded | declared | 0 | 0 |
-| DAUR / unshielded | Dual Aurora | DAUR | 6 | native / unshielded | described | 1 | 2000 |
-| DAUR / shielded | Dual Aurora | DAUR | 6 | native / shielded | described | 1 | 1000 |
-| CNST / orion | Constellations · Orion | CNST | 0 | native / shielded | described | 1 | 1 |
-| CNST / lyra | Constellations · Lyra | CNST | 0 | native / shielded | described | 1 | 1 |
-| CNST / cygnus | Constellations · Cygnus | CNST | 0 | native / shielded | described | 1 | 1 |
-| CNST / vega | Constellations · Vega | CNST | 0 | native / shielded | described | 1 | 1 |
-| CNST / altair | Constellations · Altair | CNST | 0 | native / shielded | described | 1 | 1 |
-| LLIAR | Ledger Liar | LLIAR | 6 | native / unshielded | inconsistent | 1 | 7 |
-
-## Token domains and native colors
-
-Every domain text below is UTF-8 padded with trailing zero bytes to exactly 32 bytes. Ledger tokens LSUN and LMOON have no native color: the derivations stored as tokenColor for those rows in the deployment manifest must not be used as token identifiers. LLIAR uses its recorded native color despite its conflicting metadata declaration.
-
-| Token record | Domain text | Native color (hex) |
-|---|---|---|
-| LSUN | `umbra:lsun` | none — ledger token |
-| LMOON | `umbra:lmoon` | none — ledger token |
-| SSTAR | `umbra:sstar` | `a988a5eccbc9ba6faa93c72aa344db0776dae4962a6c67dbe1b1633a883df997` |
-| SNEB | `umbra:sneb` | `b147dc1b324117e5c5f8d06cf8b2277b4067b1feeb285f00b76e692e1f760566` |
-| SGHOST | `umbra:sghost` | `14422c1082c4af5037779011e96926fd13f59786fa36e6df61a45c41d75e7f11` |
-| UCOM | `umbra:ucom` | `b92eb7e767009c202a9419a7f8952002959d42c2a1672efc7171a8af1e0c7fa4` |
-| UMET | `umbra:umet` | `1677a42ad8a035718b84662852e9be4961870b1d601c2b35a709be68ebee0438` |
-| UPROM | `umbra:uprom` | `19e18ca3ee12f6e93e24ec53ca5dfe3f3904509767e3ffd8e5fd02498b471cf9` |
-| DAUR / unshielded | `umbra:daur` | `0cc414ba41fbfcc579fcc23abc40d15686ba0256e366e53e8145683a97fef136` |
-| DAUR / shielded | `umbra:daur` | `0cc414ba41fbfcc579fcc23abc40d15686ba0256e366e53e8145683a97fef136` |
-| CNST / orion | `cnst:orion` | `00a3eb500a600b975ff35b9ac624513e0c1c4277f794a3df4d5dfd3e0b487b93` |
-| CNST / lyra | `cnst:lyra` | `cd99dea3f3a4e691f045d76e4b98747b68e3fa4f90b9c8414337a5b3e6758081` |
-| CNST / cygnus | `cnst:cygnus` | `4d04dab56afbb37ce2b135937f6efeac132b7a7e79139daec9854fc908da2868` |
-| CNST / vega | `cnst:vega` | `3d9180f0b7b00dd52c8a35c0ee1558d901e11619bcea9e2e4aaef1a0722bf64f` |
-| CNST / altair | `cnst:altair` | `9e7032f27cb031d4a3518d970391c0d775485b8f15f41cbf18d4142c7e1f15b1` |
-| LLIAR | `umbra:lliar` | `322445b1187ef7c276c68740958ed158f32b7582b2ad8b4d67ef05c9b5de988d` |
-
-## Deployment and call details
-
-Deployment block times below come from the live indexer query. The script recorded-at time comes from the pinned manifest and is later than the block timestamp. Post-deployment calls are transcribed from the manifest, where every listed call has status SucceedEntirely; those individual calls were not independently re-queried for this record.
-
-### LSUN — Ledger Sun
-
-- Source: [LSUN.compact](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/71c5b0b5fc0503187df5fb7bb67687b3a5c55ef6/contracts/generated/LSUN.compact); reference template: `LedgerToken`.
-- Contract address: `76c2fd63ad1a637dc5900e2bbfac47c2a30405eb3b8b2c0c32d675846c100058`.
-- Deployment transaction hash: `1439d7af123095c763fee76ebca7481401637a7d3d3a0d4d71d7d0daae632262`.
-- Deployment transaction identifier: `00e1015fb005a27bef3a51cc3a671f0cd8c090a2d2807f645c3aeab2419b6d8acc`.
-- Deployment block: **497370**; block hash: `0dc542c695e3cbe5fe9065c31127efc5991f0fcaef9f8ce3687033d2de3be1a4`.
-- Block timestamp: **2026-09-17T06:00:48Z**; script recorded at: `2026-09-17T06:01:01.893Z`.
-- Live deployment verification: `ContractDeploy`, `SUCCESS`.
-- Artifact SHA-256 recorded by deployment script: `6e0c3e6fdfd16b0340c0d4096e88a126d118e8b5e1136ee3f1846f85933b0523`.
-
-Ledger balances: the reference sequence credits 1,000,000 base units and transfers 250,000. These are contract-state operations, not native mint effects; the token has no native color.
-
-| Step | Circuit | Block | Transaction hash | Recorded at (UTC) |
-|---|---|---|---|---|
-| 0 | `publishMetadata` | 497373 | `cd51d104924895a1f8601568e88420d3bb0dc671188f9b3715b7ea15e24a5be8` | 2026-09-17T06:01:20.291Z |
-| 1 | `ledgerMint` | 497376 | `2643633e666d18a989919d2875272e3c411c3ec2f6e1ea3a6908000f1e0b2a9d` | 2026-09-17T06:01:38.993Z |
-| 2 | `transfer` | 497379 | `34e0052c4ffb7387a06c19a0d98aebb089cb9c563ffccae6798f9adcad760f44` | 2026-09-17T06:01:56.360Z |
-
-### LMOON — Ledger Moon
-
-- Source: [LMOON.compact](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/71c5b0b5fc0503187df5fb7bb67687b3a5c55ef6/contracts/generated/LMOON.compact); reference template: `LedgerToken`.
-- Contract address: `9fe4724d67cb395791ad69ba040f8c7dae872b9e961bd766a390db3954694932`.
-- Deployment transaction hash: `98617142cff03d0ebef93a4f329b8f37515f14d34a415227b65fa759e8f4a898`.
-- Deployment transaction identifier: `00e5eab7c7fa2f05de56d12789699ffcdc586cd7317b3e7ea9e1a49341409d2c03`.
-- Deployment block: **497524**; block hash: `dafdb36d892ae3bab8308b395734cbe6052aad6fae9633fb12fb9afa067c1c4c`.
-- Block timestamp: **2026-09-17T06:16:12Z**; script recorded at: `2026-09-17T06:16:27.233Z`.
-- Live deployment verification: `ContractDeploy`, `SUCCESS`.
-- Artifact SHA-256 recorded by deployment script: `c6cd3d0e773f9285575ee39945b68575e31064f6f2536fdebd83cb1548706258`.
-
-Published initially as Ledger Moon, then changed to Ledger Moon (renamed). The reference sequence credits 5,000,000 base units in contract state. The token has no native color.
-
-| Step | Circuit | Block | Transaction hash | Recorded at (UTC) |
-|---|---|---|---|---|
-| 0 | `publishMetadata` | 497528 | `8f8bbd0e98101dc90bc0363efe6ed8e8e05ec42f76c07e3e097eb15c790817db` | 2026-09-17T06:16:51.056Z |
-| 1 | `ledgerMint` | 497532 | `6d93e088948f48eb2b6104aa445eb82020087125d0aa6de50d535c5ad6952cf6` | 2026-09-17T06:17:15.075Z |
-| 2 | `publishRename` | 497535 | `bd5fc946efc966cc9f70afd3a50db8049c63e9de8c5a6aac3747b27364f08956` | 2026-09-17T06:17:32.224Z |
-
-### SSTAR — Shielded Star
-
-- Source: [SSTAR.compact](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/71c5b0b5fc0503187df5fb7bb67687b3a5c55ef6/contracts/generated/SSTAR.compact); reference template: `NativeShieldedToken`.
-- Contract address: `7d0bbc9546e0976f27a069e43490deb670ec0d51514c2da634b062e65b2938c7`.
-- Deployment transaction hash: `e95797175c485df7d0c5a809e0e3178909c18f43fc63f9fae96a0b242390f34d`.
-- Deployment transaction identifier: `008cbb9c0c79455bc47bc43a7fb69b3ba92d007e5476edc87cc69c36e08627edae`.
-- Deployment block: **497302**; block hash: `ce8bca97a9055a0599edcbd47374da69d30d3ceafb73bf27aff7907b290f873a`.
-- Block timestamp: **2026-09-17T05:54:00Z**; script recorded at: `2026-09-17T05:54:14.976Z`.
-- Live deployment verification: `ContractDeploy`, `SUCCESS`.
-- Artifact SHA-256 recorded by deployment script: `34eec417c635cf3bb5d821a58f5abc3d4bf10f45aa7a9156de10383d3c4681e6`.
-
-Publishes metadata, then mints 5,000,000 native shielded base units.
-
-| Step | Circuit | Block | Transaction hash | Recorded at (UTC) |
-|---|---|---|---|---|
-| 0 | `publishMetadata` | 497306 | `ca7aa26e6ac435dac92678d4c4ada1226d5fbc435f52ee0b043fe9af55666e56` | 2026-09-17T05:54:38.466Z |
-| 1 | `mint` | 497355 | `403336bc75c82f3690647c783282d891beecf8ae897427e7dc06dc0781473784` | 2026-09-17T05:59:32.378Z |
-
-### SNEB — Shielded Nebula
-
-- Source: [SNEB.compact](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/71c5b0b5fc0503187df5fb7bb67687b3a5c55ef6/contracts/generated/SNEB.compact); reference template: `NativeShieldedToken`.
-- Contract address: `e7597c0205132b33c76d1df7f062ed022616807bd868d0fc101a65a89fee6fce`.
-- Deployment transaction hash: `06dda4c041b31830de6bc816f5a45269cc5b6c07ea5cee0412c0dcb3bf1626f7`.
-- Deployment transaction identifier: `003a4d77990c25a03c5dd8835ee901c6f36a68eb66bf3c1ce255f534aa682e0633`.
-- Deployment block: **497479**; block hash: `b98cf0be58f7d3b95f78f9ad201d8c35ea83f6179d3d702d00e2e5e59ec4ab23`.
-- Block timestamp: **2026-09-17T06:11:42Z**; script recorded at: `2026-09-17T06:11:56.157Z`.
-- Live deployment verification: `ContractDeploy`, `SUCCESS`.
-- Artifact SHA-256 recorded by deployment script: `057e23444423e4a4d6784705f8af8d058f7489d6e670c8e2f9978aa32fd7b6ee`.
-
-Publishes metadata and multipart JSON in metadata/0 through metadata/5, then mints 1 and 2 native shielded units.
-
-| Step | Circuit | Block | Transaction hash | Recorded at (UTC) |
-|---|---|---|---|---|
-| 0 | `publishMetadata` | 497482 | `d8cd47f423f1b4b9dda0ac6b9247f4d319319dd87882276effca5045981767c1` | 2026-09-17T06:12:14.473Z |
-| 1 | `mint` | 497486 | `16f89052b957025fef69be9f16f1f3eba19acd59812739a4436942df94a0297b` | 2026-09-17T06:12:38.753Z |
-| 2 | `mint` | 497490 | `deac4287d5aa3efcea81df8fb581a3dbd3b1833ab9112bca0be77b9f5338c058` | 2026-09-17T06:13:02.741Z |
-
-### SGHOST — Shielded Ghost
-
-- Source: [SGHOST.compact](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/71c5b0b5fc0503187df5fb7bb67687b3a5c55ef6/contracts/generated/SGHOST.compact); reference template: `NativeShieldedToken`.
-- Contract address: `520b8ecf3517a9fa797352bb97f438ccab0aa8f3cc452d3b3ef57df519a77298`.
-- Deployment transaction hash: `fd1de354173b232bc19f2ecdf75be32a2c5c47e5e5ceee8219fa020d5bb597b0`.
-- Deployment transaction identifier: `003eddec1fe594610f6c419894477bc9b0c833bfae51ca3a2320866b17d6d07df0`.
-- Deployment block: **497493**; block hash: `8ca6418945ebaed23fc7da62afc73efbb8c97671e276834fb77e194e68ca159e`.
-- Block timestamp: **2026-09-17T06:13:06Z**; script recorded at: `2026-09-17T06:13:20.477Z`.
-- Live deployment verification: `ContractDeploy`, `SUCCESS`.
-- Artifact SHA-256 recorded by deployment script: `ccaa94d5265e30cabd6085866422251b641a04c5551b3b6968aa5e623d08e395`.
-
-Shielded Ghost / SGHOST is a reference label only. No name, symbol, or decimals were published; the recorded token metadata is null for all three fields. The mint creates 13 native shielded base units.
-
-| Step | Circuit | Block | Transaction hash | Recorded at (UTC) |
-|---|---|---|---|---|
-| 0 | `mint` | 497497 | `fcc68933c203738b7fa93b806e2231b86e5f1b3fe590ac6f2729dd1f10cfdd77` | 2026-09-17T06:13:44.161Z |
-
-### UCOM — Unshielded Comet
-
-- Source: [UCOM.compact](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/71c5b0b5fc0503187df5fb7bb67687b3a5c55ef6/contracts/generated/UCOM.compact); reference template: `NativeUnshieldedToken`.
-- Contract address: `40918a6666a2390010f189cdb535b5b17cdd9479f502241e02ec4a76a69eebf2`.
-- Deployment transaction hash: `a0a9b5b6abcfae62b6b80bd2fa791843127856bf0da1c8be128eb23171bf014e`.
-- Deployment transaction identifier: `00f54fb6a24241dca4f7cc994e08b0764626d27c5ec834f07b1d384543f895c22e`.
-- Deployment block: **497358**; block hash: `32aae1b105d0b4a1ebcd6d56794df9e6eb9e669ecf0ff23eecde8cc1c161bf37`.
-- Block timestamp: **2026-09-17T05:59:36Z**; script recorded at: `2026-09-17T05:59:51.211Z`.
-- Live deployment verification: `ContractDeploy`, `SUCCESS`.
-- Artifact SHA-256 recorded by deployment script: `7158abf8c9b2ab8fba211807dbdf46985205b89a764ab3789f3d265224c6537c`.
-
-Publishes metadata, then mints 2,500,000 native unshielded base units.
-
-| Step | Circuit | Block | Transaction hash | Recorded at (UTC) |
-|---|---|---|---|---|
-| 0 | `publishMetadata` | 497363 | `3284003ada9f8812dbe1a94132a9e02de409be4900eb9d2b4b5eb87bd7649635` | 2026-09-17T06:00:20.250Z |
-| 1 | `mint` | 497367 | `6247a89afa6aba2b81e09447da75cbd4b5d7b307f2859b547ccc2f3d725eb0d5` | 2026-09-17T06:00:44.337Z |
-
-### UMET — Unshielded Meteor
-
-- Source: [UMET.compact](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/71c5b0b5fc0503187df5fb7bb67687b3a5c55ef6/contracts/generated/UMET.compact); reference template: `NativeUnshieldedToken`.
-- Contract address: `f184f92ffe9f015d1a2cdb76d7b5621fe50714175360310b046c9a7fe8fee43e`.
-- Deployment transaction hash: `6d41f42213c3dacce511bed657a035d0233709dc3919ad9540b921fb45805448`.
-- Deployment transaction identifier: `00086c26fc45bf03ec1a6b9443716022257cc9a2d892e5c880d4fd66419691fdd2`.
-- Deployment block: **497500**; block hash: `4fce0d107c84c60f5527f2a1f04538988f263c821b7539aca6515a05a2397703`.
-- Block timestamp: **2026-09-17T06:13:48Z**; script recorded at: `2026-09-17T06:14:02.849Z`.
-- Live deployment verification: `ContractDeploy`, `SUCCESS`.
-- Artifact SHA-256 recorded by deployment script: `3f4442b5d2bd8af96a66c2861fd65099b6de2f162fc870558596e737a27262a5`.
-
-Mints 100, 200, and 300 native unshielded base units before publishing metadata; exercises the observed-to-described transition.
-
-| Step | Circuit | Block | Transaction hash | Recorded at (UTC) |
-|---|---|---|---|---|
-| 0 | `mint` | 497504 | `3e27a0879bcfc38dc65eaf7db342c170399783380c139fe6658311e85869f457` | 2026-09-17T06:14:26.598Z |
-| 1 | `mint` | 497508 | `a3d90cfe4c0d374e9d384a50d6cf60dae048f27ab8bedf9b30025008028f71e6` | 2026-09-17T06:14:50.744Z |
-| 2 | `mint` | 497512 | `5916ccb98dbfa8172995670df6f391afadf649bb2b182e0fb71844a45ded61a3` | 2026-09-17T06:15:14.660Z |
-| 3 | `publishMetadata` | 497515 | `7c2644c1249c1082a7e49b62ad79236f93e35cbd6fb98d73e3dc9b28fa185a98` | 2026-09-17T06:15:32.095Z |
-
-### UPROM — Unshielded Promise
-
-- Source: [UPROM.compact](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/71c5b0b5fc0503187df5fb7bb67687b3a5c55ef6/contracts/generated/UPROM.compact); reference template: `NativeUnshieldedToken`.
-- Contract address: `64f7b33d55c2647b6ce11a8a6c631f9558da6a6354f0ffa9a852cccc4c547da2`.
-- Deployment transaction hash: `6b49da50bc65fde667244d6f622f8995affb72974f45a2eca973a261fdb9322f`.
-- Deployment transaction identifier: `00053e07132960b94be8f03d52c864305743d134f1ea3588f1171145981bf35368`.
-- Deployment block: **497518**; block hash: `aa0313727ba67fd8127353683d8d87c04252805ced0e3df9b9832a012790bc18`.
-- Block timestamp: **2026-09-17T06:15:36Z**; script recorded at: `2026-09-17T06:15:50.978Z`.
-- Live deployment verification: `ContractDeploy`, `SUCCESS`.
-- Artifact SHA-256 recorded by deployment script: `b1e0c0d2a15636aaea05106f880fc31ab4592c7af95ce7b95a48bb812d400d6a`.
-
-Publishes metadata without minting. Its native color is derivable, but the recorded native mint count is zero.
-
-| Step | Circuit | Block | Transaction hash | Recorded at (UTC) |
-|---|---|---|---|---|
-| 0 | `publishMetadata` | 497521 | `725569eea2b4f3a7be502d4d461cdc6301e00bc1fda290009429485e30395d75` | 2026-09-17T06:16:08.046Z |
-
-### DAUR — Dual Aurora
-
-- Source: [DAUR.compact](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/71c5b0b5fc0503187df5fb7bb67687b3a5c55ef6/contracts/generated/DAUR.compact); reference template: `NativeDualToken`.
-- Contract address: `57244319c3660e539b6f7f66248e46642c0d31d862986bedb2c1d4186061d685`.
-- Deployment transaction hash: `3a892dc137614d410b2faff51dbad7fad2a99969b26d0513bd966e91135ed8ed`.
-- Deployment transaction identifier: `00652d5972dbeb57be4dff3186eb9fb2bdb50d0af32337282e1177f3c526406e6a`.
-- Deployment block: **497382**; block hash: `f228f234d2d06904b0972fc65a68f05c76a94c5477ce0c30f34420aab04d4099`.
-- Block timestamp: **2026-09-17T06:02:00Z**; script recorded at: `2026-09-17T06:02:14.256Z`.
-- Live deployment verification: `ContractDeploy`, `SUCCESS`.
-- Artifact SHA-256 recorded by deployment script: `5ffe2786e1a57a696e92423e86ce6947da6b7dcfdb9d7c77e5bb112fa8c48d2d`.
-
-One contract and domain separator produce two token records: shielded and unshielded. Both share the same 32-byte color; the reference mints 1,000 shielded and 2,000 unshielded base units.
-
-| Step | Circuit | Block | Transaction hash | Recorded at (UTC) |
-|---|---|---|---|---|
-| 0 | `publishUnshielded` | 497385 | `3ca0b8329d36bdd02c6bb336ce37fa8daa9a76fd34e697795e9257b40ce128b4` | 2026-09-17T06:02:32.398Z |
-| 1 | `publishShielded` | 497388 | `08c0889ccca19a30808043f3a52de497662cfc46a57f36069d0ba76c9bd1e5e4` | 2026-09-17T06:02:49.831Z |
-| 2 | `mintShielded` | 497392 | `1569078f5a3333aa84d0baf1ed2343cde4fd887f6034dc200c467247bae7b92c` | 2026-09-17T06:03:13.977Z |
-| 3 | `mintUnshielded` | 497396 | `66e053366275aaa46201b833cc17920c761975b472ce88f7e0d0304b660d1ea3` | 2026-09-17T06:03:37.792Z |
-
-### CNST — Constellations
-
-- Source: [CNST.compact](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/71c5b0b5fc0503187df5fb7bb67687b3a5c55ef6/contracts/generated/CNST.compact); reference template: `ShieldedCollection`.
-- Contract address: `6cedc46ac5a8cda964c2493a753c2c4942d6e3ed7641bdd0c28e9b672cb1e97c`.
-- Deployment transaction hash: `3c75c42298fb4355f3946f4386502c8eaded7c0a07a8e91bfa5f81923689a5a2`.
-- Deployment transaction identifier: `00f7eeab9635b11771fa763c344113176091110ba225e1c617da79f53d08adfed7`.
-- Deployment block: **497399**; block hash: `fa6980e9a3b0593a4149edf20e0b07724a3ae400b5eff00ae7db773f7d2db82c`.
-- Block timestamp: **2026-09-17T06:03:42Z**; script recorded at: `2026-09-17T06:03:57.116Z`.
-- Live deployment verification: `ContractDeploy`, `SUCCESS`.
-- Artifact SHA-256 recorded by deployment script: `d3c76108bc30debc4f58d291a925ea0f79090e118f8d523f66991adee9098ccc`.
-
-One contract holds five shielded pieces: Orion, Lyra, Cygnus, Vega, and Altair. Each has its own domain separator and color. Orion magnitude updates are 0.18 → 0.42 → 1.25. Recorded tokenUri values point to http://localhost:10020/constellations/{piece}; these are local demonstration resolver URLs, not a public hosted metadata service.
-
-| Step | Circuit | Block | Transaction hash | Recorded at (UTC) |
-|---|---|---|---|---|
-| 0 | `mintPiece` | 497403 | `a80d3d0674544837d4d74702348d6e70cc80161fc40e7f9ed0118bb0cea90e2f` | 2026-09-17T06:04:20.731Z |
-| 1 | `publishOrion` | 497407 | `6b30eeab3c39549f086ad3ec893e7d81f0a6a50873d53b211567ee15bda7ef51` | 2026-09-17T06:04:44.597Z |
-| 2 | `updateOrion1` | 497411 | `de9e90a0bea8cd16c1c4e2be587bfda7b8cfc7d3199b9b66d1b76ccd65eeb6d6` | 2026-09-17T06:05:08.584Z |
-| 3 | `updateOrion2` | 497414 | `5f953c7439a7bc408508663ee59f86407fc8cc76d6618956483f1fbf60e56f69` | 2026-09-17T06:05:25.966Z |
-| 4 | `mintPiece` | 497418 | `f5dfa612d229a05e5002eeae84085863c3c19800ac8d94646c567ffa025e7825` | 2026-09-17T06:05:50.207Z |
-| 5 | `publishLyra` | 497421 | `251c639ee9d91a1ea88a7b9675c6003dc45a8607601203a3163987c9b0819026` | 2026-09-17T06:06:08.692Z |
-| 6 | `mintPiece` | 497425 | `0def795054303f32d4a10bb8244ce66dd27f58e4657303784ca3614dba8ebc92` | 2026-09-17T06:06:32.909Z |
-| 7 | `publishCygnus` | 497428 | `4b0d51d23cb2c01b27f7c981e72290152ed631a9f9e1d159fc58ac19e9810b37` | 2026-09-17T06:06:50.019Z |
-| 8 | `mintPiece` | 497432 | `edbe3db225d6faa3278eac4571175d2e864645a3e1c30329339008ca7716b950` | 2026-09-17T06:07:14.396Z |
-| 9 | `publishVega` | 497435 | `d946c24a9713f6e52974b167160ca0a31b1566b5c3fddb9d1b7976d7e273e48e` | 2026-09-17T06:07:32.808Z |
-| 10 | `mintPiece` | 497439 | `03089d2ff33b2d379a82f5f08824e5fa7e077bbe3225dcbc92c81ae9fdf907a8` | 2026-09-17T06:07:57.006Z |
-| 11 | `publishAltair` | 497442 | `772055212d7fa0312cc46141f1dff887862f21b572b1ff0e0dd414d59e5222ea` | 2026-09-17T06:08:14.197Z |
-
-### LLIAR — Ledger Liar
-
-- Source: [LLIAR.compact](https://github.com/acedward/mip-erc7496-midnight-contracts/blob/71c5b0b5fc0503187df5fb7bb67687b3a5c55ef6/contracts/generated/LLIAR.compact); reference template: `NativeUnshieldedToken`.
-- Contract address: `b006a6647c26829987ec1bd59de1d4107019d7f54c097d3fdc25a4dddcf1231e`.
-- Deployment transaction hash: `4371af40438b44abf29cd568a2a740eeafd204b5fbfdd89ef046f65cda13da27`.
-- Deployment transaction identifier: `002a9183fd830203bf34a35879254a6b18feb5ff7a1aa240750788482df6f3c0b1`.
-- Deployment block: **497538**; block hash: `750d81946e352c4d7f26d0892999db2b3fb1b56b554a7ebba1b6a33578047af4`.
-- Block timestamp: **2026-09-17T06:17:36Z**; script recorded at: `2026-09-17T06:17:51.154Z`.
-- Live deployment verification: `ContractDeploy`, `SUCCESS`.
-- Artifact SHA-256 recorded by deployment script: `4ef3204538ec1e3ee02b7b0e7740711486fd7dad200f249e7f51e34e27a0cf83`.
-
-Intentional inconsistency fixture: metadata declares ledger kind 2, but the contract mints 7 native unshielded base units. Expected indexer status is inconsistent, with observed native storage. The pinned expected-tokens fixture has color=null for this row; this document records the native color from the deployment manifest instead and does not treat the ledger declaration as authoritative.
-
-| Step | Circuit | Block | Transaction hash | Recorded at (UTC) |
-|---|---|---|---|---|
-| 0 | `publishMetadata` | 497542 | `5208e34a1b52b838fb89c8a3ffa195491e3ee100532ff0837fee1eb5e55c3633` | 2026-09-17T06:18:14.924Z |
-| 1 | `mint` | 497546 | `9e1786cb028593e9fa346f772524a8d67e5ee272e56e3d84afe7b420fa889cfe` | 2026-09-17T06:18:37.597Z |
+The full pre-MIP record — per-row transaction tables, colours and domains — is the previous revision of this file, `git show fc1f4f4:stagenet-token-metadata-deployments.md`.
 
 ## Rechecking a deployment
 
@@ -312,8 +347,8 @@ Send this read-only GraphQL query to the indexer HTTP endpoint. Replace the addr
 
 ```graphql
 query VerifyRecordedDeployment {
-  contractAction(address: "7d0bbc9546e0976f27a069e43490deb670ec0d51514c2da634b062e65b2938c7",
-    offset: { transactionOffset: { hash: "e95797175c485df7d0c5a809e0e3178909c18f43fc63f9fae96a0b242390f34d" } }) {
+  contractAction(address: "152827bc1d9ea7ecec0d13879e87a21ecf8f283804dfef16c9b805612acfea90",
+    offset: { transactionOffset: { hash: "9a131d060981b73d8574bd2307f62d9e9fd90611704b9168aafe2ef1ad7287b6" } }) {
     __typename
     address
     transaction {
@@ -325,4 +360,6 @@ query VerifyRecordedDeployment {
 }
 ```
 
-The file contains public deployment data only. Wallet mnemonics, seeds, and private keys are not included.
+To see the metadata itself, ask the same indexer for the events of one publish transaction: `contractEvents(filter: { contractAddress: "…", transactionHash: "…", types: [MISC] })` returns `MiscContractEvent`s whose `name` is the 32 bytes above and whose `payload` is 256 bytes with the `val-type` byte at offset 65.
+
+The file contains public deployment data only. Wallet mnemonics, seeds and private keys are not included.
